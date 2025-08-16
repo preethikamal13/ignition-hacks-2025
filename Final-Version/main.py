@@ -98,14 +98,17 @@ def edit(product_id):
 
         if expiryDate != "":
             expiryDateInteger = int(expiryDate.replace("-", ""))
+            product.expiryDate = expiryDateInteger
+            product.expiryDateString = expiryDate
+            product.expiryDateDate = datetime.strptime(expiryDate, "%Y-%m-%d")
+        else:
+            product.expiryDate = -1
+            product.expiryDateString = ""
 
         purchaseDateInteger = int(purchaseDate.replace("-", ""))
 
         product.name = name
         product.quantity = quantity
-        product.expiryDate = expiryDateInteger
-        product.expiryDateString = expiryDate
-        product.expiryDateDate = datetime.strptime(expiryDate, "%Y-%m-%d")
         product.purchaseDate = purchaseDateInteger
         product.purchaseDateString = purchaseDate
         product.purchaseDateDate = datetime.strptime(purchaseDate, "%Y-%m-%d")
