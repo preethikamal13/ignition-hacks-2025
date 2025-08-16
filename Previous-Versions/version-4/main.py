@@ -5,7 +5,7 @@ import requests
 
 # Create the Flask app
 app = Flask(__name__)
-app.secret_key = "shhhsecret"
+app.secret_key = "thekey"
 API_KEY = ""
 
 # Initialize the SQLite database
