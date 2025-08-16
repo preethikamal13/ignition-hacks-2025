@@ -116,7 +116,7 @@ def edit(product_id):
         # Output a message to say that changes were saved
         flash("Your changes were saved!")
 
-        return render_template("home.html")
+        return redirect("/")
 
     return render_template("editProduct.html", product=product)
 
