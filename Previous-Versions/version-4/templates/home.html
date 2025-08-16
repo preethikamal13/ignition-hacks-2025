@@ -227,10 +227,10 @@
               <li>
                 <input type="checkbox" id="ingredient1-{{product.id}}" value="{{product.id}}" name="ingredient">
                 <label for="ingredient1-{{product.id}}">{{product.name}}</label>
-                {% if product.expiryDateInteger != -1 and (product.expiryDateDate - today).days <= 5 %}
+                {% if product.expiryDateDate < today %}
+                    has already expired! May not be safe to consume. 🛑
+                {% elif product.expiryDateInteger != -1 and (product.expiryDateDate - today).days <= 5 %}
                     expiring soon! ⚠️
-                {% elif product.expiryDateDate < today %}
-                    has already expired! Not safe for consumption.
                 {% endif %}
               </li>
           {% endfor %}
