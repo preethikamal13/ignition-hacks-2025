@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+    <h1>Recipe Suggestions</h1>
+    <p>Based on:
+        {% for p in chosen %}
+            {{ p.name }}{% if not loop.last %}, {% endif %}
+        {% endfor %}
+    </p>
+
+    {% if recipeList %}
+        <ul>
+            {% for recipe in recipeList %}
+                <li>
+                    <h4>{{recipe.title}}</h4>
+                    {% if recipe.image %}
+                        <img src="{{recipe.image}}" alt="{{ recipe.title }}" width="200">
+                    {% endif %}
+                    <a href="https://spoonacular.com/recipes/{{ recipe.title | replace(' ', '-') }}-{{ recipe.id }}" target="_blank">View Recipe</a>
+                </li>
+            {%endfor%}
+        </ul>
+    {% else %}
+        No recipes found.
+    {% endif %}
+
+    <form action="/">
+        <button type="submit">Return Home 🏠</button>
+    </form>
+
+</body>
+</html>
