@@ -23,7 +23,7 @@ There is also an option at the bottom of the page to get recipes with selected f
 - Unfortunately, I do not have much experience in using CSS so I struggled with creating a visually appealing user interface. I used ChatGPT to modify the CSS and HTML code solely to make the web app look cleaner since I did not have enough time to learn how to create all the visuals that I was hoping to have.
 
 ## Accomplishments that I'm proud of
-This was my first time creating a solo hackathon project, so I am glad that I was able to code a functional web app within 24 hours. 
+This was my first time creating a solo hackathon project, so I am glad that I was able to code a functional web app within 24 hours that executes the main task of listing inputted foods in order of expiry date. The Spoonacular recipe generator was an extension that I had wanted to include after finishing the primary functions, and I am happy that I was able to add that in as well.
 
 ## What I learned
 - How to create a SQLite database using Flask's extension Flask-SQLAlchemy. This made it very easy to manage the database without needing to know SQL. Moreover, it helped me accomplish the main function of my program to sort elements based on a certain column’s values.
