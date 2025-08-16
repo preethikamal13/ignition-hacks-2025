@@ -1,0 +1,248 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Grocery Manager</title>
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      font-family: 'Segoe UI', Tahoma, sans-serif;
+      box-sizing: border-box;
+    }
+
+    body {
+      background: linear-gradient(120deg, #9be2a5, #d7f5d3);
+      color: #333;
+    }
+
+    .container {
+      width: 90%;
+      max-width: 1000px;
+      margin: auto;
+      padding: 40px 0;
+    }
+
+    h1 {
+      text-align: center;
+      font-size: 2.5rem;
+      margin-bottom: 30px;
+      color: #2d6045;
+    }
+
+    .app {
+      background: #fff;
+      padding: 30px;
+      border-radius: 20px;
+      box-shadow: 0 8px 15px rgba(0, 0, 0, 0.1);
+    }
+
+
+    input, textarea, button {
+      width: 100%;
+      padding: 12px 15px;
+      margin: 10px 0;
+      border-radius: 10px;
+      border: 1px solid #ccc;
+      font-size: 1rem;
+    }
+
+    textarea {
+      resize: vertical;
+      min-height: 80px;
+    }
+
+    button {
+      background: #4CAF50;
+      color: white;
+      font-weight: bold;
+      border: none;
+      cursor: pointer;
+      transition: 0.2s ease;
+    }
+
+    button:hover {
+      background: #3e8e41;
+    }
+
+    h3 {
+      margin-top: 40px;
+      color: #2d6045;
+      border-bottom: 2px solid #ddd;
+      padding-bottom: 5px;
+    }
+
+    ul {
+      list-style: none;
+      margin-top: 15px;
+    }
+
+    .card {
+      background: #f9fdf9;
+      border: 1px solid #e1e1e1;
+      border-radius: 12px;
+      padding: 20px;
+      margin-bottom: 15px;
+      box-shadow: 0 4px 8px rgba(0,0,0,0.05);
+    }
+
+    .card strong {
+      display: inline-block;
+      width: 140px;
+      color: #444;
+    }
+
+    .status {
+      margin-top: 10px;
+      font-weight: bold;
+    }
+
+    .expired {
+      color: #d9534f;
+    }
+
+    .soon {
+      color: #f0ad4e;
+    }
+
+    .actions {
+      margin-top: 15px;
+    }
+
+    .actions input {
+      background: #0275d8;
+      color: white;
+      cursor: pointer;
+    }
+
+    .actions input:hover {
+      background: #025aa5;
+    }
+
+    ul li {
+      margin: 6px 0;
+    }
+
+    ul li input[type="checkbox"] {
+      display: none; /* hide default checkbox */
+    }
+
+    ul li label {
+      display: inline-block;
+      padding: 8px 14px;
+      border: 2px solid #4CAF50;
+      border-radius: 25px;
+      cursor: pointer;
+      font-size: 1rem;
+      color: #2d6045;
+      background: #fff;
+      transition: all 0.2s ease;
+    }
+
+    ul li input[type="checkbox"]:checked + label {
+      background: #4CAF50;
+      color: white;
+      border-color: #388E3C;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+
+    <h1>Grocery Manager</h1>
+    <div class="app">
+
+      <!-- Flash messages -->
+      <ul>
+        {% for mesg in get_flashed_messages() %}
+          <li>{{ mesg }}</li>
+        {% endfor %}
+      </ul>
+
+      <!-- Add new product form -->
+      <form id="add-new-product" method="post">
+        <input type="text" id="new-product" name="new-product" placeholder="Product name" required />
+        <input type="number" id="new-product-quantity" name="new-product-quantity" value="1" placeholder="Quantity"/>
+        <label>Purchase date:</label>
+        <input type="date" id="new-product-purchase-date" name="new-product-purchase-date" required/>
+        <label>Expiry date (optional):</label>
+        <input type="date" id="new-product-expiry-date" name="new-product-expiry-date"/>
+        <textarea id="new-product-notes" name="new-product-notes" placeholder="Additional notes (ex: vegetarian)"></textarea>
+        <button type="submit">➕ Add Product</button>
+      </form>
+
+      <!-- Products with expiry date -->
+      <h3>Products with Expiry Date</h3>
+      <ul id="expiry-date-list">
+        {% for product in productsWithExpiry %}
+          <li class="card">
+            <p><strong>Name:</strong> {{ product.name }}</p>
+            <p><strong>Quantity:</strong> {{ product.quantity }}</p>
+            <p><strong>Purchase Date:</strong> {{ product.purchaseDateString }}</p>
+            <p><strong>Expiry Date:</strong> {{ product.expiryDateString }}</p>
+
+            {% if today >= product.expiryDateDate %}
+              <p class="status expired">🛑 This product has already expired! It may not be safe to consume. </p>
+            {% elif (product.expiryDateDate - today).days <= 5 %}
+              <p class="status soon">⚠️ This product will expire soon!</p>
+            {% endif %}
+
+            <p><strong>Notes:</strong> {{ product.notes }}</p>
+
+            <div class="actions">
+              <form action="/edit/{{ product.id }}">
+                <input type="submit" value="✏️ Edit / Delete">
+              </form>
+            </div>
+          </li>
+        {% endfor %}
+      </ul>
+
+      <!-- Products without expiry date -->
+      <h3>Products without Expiry Date</h3>
+      <ul id="no-expiry-date-list">
+        {% for product in productsWithoutExpiry %}
+          <li class="card">
+            <p><strong>Name:</strong> {{ product.name }}</p>
+            <p><strong>Quantity:</strong> {{ product.quantity }}</p>
+            <p><strong>Purchase Date:</strong> {{ product.purchaseDateString }}</p>
+            <p><strong>Notes:</strong> {{ product.notes }}</p>
+
+            <div class="actions">
+              <form action="/edit/{{ product.id }}">
+                <input type="submit" value="✏️ Edit">
+              </form>
+            </div>
+          </li>
+        {% endfor %}
+      </ul>
+
+      <h3>Search for Recipes</h3>
+      <form action="/findRecipes" method="post">
+        <ul id="recipe-checkboxes">
+          {% for product in productsWithExpiry %}
+              <li>
+                <input type="checkbox" id="ingredient1-{{product.id}}" value="{{product.id}}" name="ingredient">
+                <label for="ingredient1-{{product.id}}">{{product.name}}</label>
+                {% if product.expiryDateDate < today %}
+                    has already expired! May not be safe to consume. 🛑
+                {% elif product.expiryDateInteger != -1 and (product.expiryDateDate - today).days <= 5 %}
+                    expiring soon! ⚠️
+                {% endif %}
+              </li>
+          {% endfor %}
+
+          {% for product in productsWithoutExpiry %}
+              <li>
+                <input type="checkbox" id="ingredient2-{{product.id}}" value="{{product.id}}" name="ingredient">
+                <label for="ingredient2-{{product.id}}">{{product.name}}</label>
+              </li>
+          {% endfor %}
+        </ul>
+          <button type="submit">Search Recipes</button>
+      </form>
+
+    </div>
+  </div>
+</body>
+</html>
