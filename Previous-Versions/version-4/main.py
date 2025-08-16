@@ -6,7 +6,7 @@ import requests
 # Create the Flask app
 app = Flask(__name__)
 app.secret_key = "shhhsecret"
-API_KEY = "150da51b65b1437a814b3320ffc905da"
+API_KEY = ""
 
 # Initialize the SQLite database
 app.config["SQLALCHEMY_DATABASE_URI"] = "sqlite:///ih2025preethi.db"
