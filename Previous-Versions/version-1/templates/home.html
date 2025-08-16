@@ -1,0 +1,186 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <title>Home</title>
+    <style>
+        *{
+            margin:0;
+            padding:0;
+            font-family: 'Cambria', sans-serif;
+            box-sizing: border-box;
+        }
+
+        .container {
+            width: 100%;
+            min-height: 100vh;
+            background: linear-gradient(30deg, #96dd99, #d7f5d3);
+            padding: 10px;
+        }
+
+        .app{
+            width: 100%;
+            max-height: 540px;
+            background: #fff;
+            padding: 10px;
+            margin: 100px auto 20px;
+            padding: 40px;
+            border-radius: 30px;
+        }
+
+        ul {
+            padding: 0;
+        }
+
+        .text-input{
+            display: flex;
+            justify-content: space-between;
+            background: #edeef0;
+            border-radius: 40px;
+            padding-left: 20px;
+            display: block;
+            width: 500px;
+        }
+
+        input {
+            font-size: 1.3rem;
+            flex: 1;
+            border: none;
+            background: transparent;
+            padding: 10px;
+        }
+
+        textarea {
+            display: flex;
+            justify-content: space-between;
+            background: #edeef0;
+            border-radius: 40px;
+            padding-left: 20px;
+            display: block;
+            width: 500px;
+            font-size: 1.3rem;
+            flex: 1;
+            border: none;
+            outline: none;
+            padding-top: 25px;
+        }
+
+        button {
+            border: none;
+            outline: none;
+            padding: 16px 50px;
+            background:#6fcca7;
+            font-size: 20px;
+            border-radius: 60px;
+            padding: 20px;
+            margin: 0 auto;
+            display: block;
+            font-family: 'Helvetica';
+            font-weight: bold;
+        }
+
+
+    </style>
+</head>
+
+<body>
+
+    <div class="container">
+        <h1 align="center">Grocery Manager</h1>
+
+        <div class="app">
+
+            <ul>
+                {% for mesg in get_flashed_messages() %}
+                  <li>{{ mesg }}</li>
+                {% endfor %}
+            </ul>
+
+            <form id="add-new-product" method="post">
+                <div class="row">
+                    <div class="text-input">
+                        <input type="text" id="new-product" name="new-product" placeholder="Product name" required/>
+                    </div>
+                    Quantity: <input type="number" id="new-product-quantity" name="new-product-quantity" value="1"/>
+                    Purchase date: <input type="date" id="new-product-purchase-date" name="new-product-purchase-date" required/>
+                    Expiry date: <input type="date" id="new-product-expiry-date" name="new-product-expiry-date"/>
+                </div>
+                <textarea id="new-product-notes" name="new-product-notes" placeholder="Additional Notes (ex: vegetarian)"></textarea>
+            <button type=submit>ADD ✅</button>
+            </form>
+
+
+            <h3>Expiry Date</h3>
+            <ul id="expiry-date-list">
+                {% for product in productsWithExpiry%}
+                  <li>NAME: {{ product.name }}
+                      <br/>
+                      QUANTITY: {{ product.quantity }}
+                      <br/>
+                      PURCHASE DATE: {{ product.purchaseDateString }}
+                      <br/>
+                      EXPIRY DATE: {{ product.expiryDateString }}
+                      <br/>
+                      {% if today >= product.expiryDateDate %}
+                        🛑️ This product has already expired! 🛑️
+                      {% elif (product.expiryDateDate - today).days <= 5 %}
+                        ⚠️This product will expire soon! ⚠️
+                      {% endif %}
+
+                      <br/>
+                      ADDITIONAL NOTES: {{ product.notes }}
+
+                      <form action="/edit/{{ product.id }}">
+                          <input type="submit" value="Edit or Delete this product"/>
+                      </form>
+                  </li>
+                {% endfor %}
+            </ul>
+
+            <h3>No expiry date</h3>
+            <div id="no-exp">
+                <ul id="no-expiry-date-list">
+                    {% for product in productsWithoutExpiry%}
+                  <li>NAME: {{ product.name }}
+                      <br/>
+                      QUANTITY: {{ product.quantity }}
+                      <br/>
+                      PURCHASE DATE: {{ product.purchaseDateString }}
+                      <br/>
+                      ADDITIONAL NOTES: {{ product.notes }}
+
+                      <form action="/edit/{{ product.id }}">
+                          <input type="submit" value="Edit this product"/>
+                      </form>
+                  </li>
+                {% endfor %}
+                </ul>
+            </div>
+
+            <!--
+            <script>
+                const name = document.getElementById("new-product");
+                const quantity = document.getElementById("new-product-quantity");
+                const expiryDate = document.getElementById("new-product-expiry-date");
+                const purchaseDate = document.getElementById("new-product-notes");
+                const notes = document.getElementById("new-product-notes");
+
+                const expiryDateList = document.getElementById("expiry-date-list");
+                const noExpiryDateList = document.getElementById("no-expiry-date-list");
+
+                function add() {
+                    let product = document.createElement("li");
+                    product.innerHTML = name.value;
+                    if (expiryDate) {
+                        expiryDateList.appendChild(product);
+                    } else {
+                        noExpiryDateList.appendChild(product);
+                    }
+                }
+            </script>
+            -->
+        </div>
+    </div>
+</body>
+</html>
