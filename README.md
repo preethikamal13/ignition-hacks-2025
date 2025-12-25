@@ -1,7 +1,7 @@
 ## We Have Food at Home
 
 ## Inspiration
-Sometimes people forget that we have a certain food product at home, and by the time they do remember that it exists, it's already past the expiration date. This inspired me to create a grocery manager app that sorts food products in order from earliest to latest expiry date, which allows users to decrease the amount of food that they waste.
+Sometimes people forget that they have a certain food product at home, and by the time they do remember that it exists, it's already past the expiration date. This inspired me to create a grocery manager app that sorts food products in order from earliest to latest expiry date, which allows users to decrease the amount of food that they waste.
 
 ## What it does
 The user can input the name, quantity (optional), purchase date, and expiry date (optional) of a product, as well as additional notes for their own needs, such as where they stored the product. The web app creates 2 lists based on whether or not an expiry date has been specified.
